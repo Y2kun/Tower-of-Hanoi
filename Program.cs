@@ -22,9 +22,9 @@ class Program {
         try {
             discCount = Convert.ToInt32(Console.ReadLine());
         } catch {
-            Console.WriteLine("Your Input was Invalid, it defaulted to 3");
+            Console.WriteLine("Your Input was Invalid, it defaulted to 3\n");
         }
-        Console.WriteLine("\nPlease Input, if the Board should be rendered using ASCII or Unicode. [a,\u001b[1mu\u001b[0m]");
+        Console.WriteLine("Please Input, if the Board should be rendered using ASCII or Unicode. [a,\u001b[1mu\u001b[0m]");
         bool enabledASCII = false;
         if(Console.ReadLine() == "a") {
             enabledASCII = true;
@@ -87,23 +87,89 @@ class Program {
         RecursivSolver(n - 1, board, midPillar, destPillar, startPillar);
     }
 
-    static void IterativeSolver(int n, Board board) {
-        int totalMoves = (1 << n) - 1; // 2^n - 1
-        List<Disc> startPillar = board.pillars[0];
-        List<Disc> destPillar = board.pillars[2];
-        List<Disc> midPillar = board.pillars[1];
+    // static void IterativeSolver(int n, Board board) {
+    //     for (int i = 1; i <= (1 << n) - 1; i++) {
+    //         // int startPillar, destPillar;
+    //         int startPillar = (i & i - 1) % 3; // Get the source pillar
+    //         int destPillar = ((i | i - 1) + 1) % 3; // Get the destination pillar
 
+    //         board.moveDisc(board.pillars[startPillar], board.pillars[destPillar]);
+    //         board.draw();
+    //         // Thread.Sleep(100);
+    //     }
+    // }
+
+    static void IterativeSolver(int n, Board board) {
+        int startPillar = 0; // Source pillar (Left)
+        int midPillar = 1;   // Auxiliary pillar (Middle)
+        int destPillar = 2;  // Destination pillar (Right)
+
+        // If the number of disks is even, swap the destination and auxiliary pillars
         if (n % 2 == 0) {
-            var temp = destPillar;
+            int temp = destPillar;
             destPillar = midPillar;
             midPillar = temp;
         }
 
-        for (int i = 1; i <= totalMoves; i++) {
-            int fromPillar = (i & i - 1) % 3; // Get the source pillar
-            int toPillar = ((i | i - 1) + 1) % 3; // Get the destination pillar
-
-            board.moveDisc(board.pillars[fromPillar], board.pillars[toPillar]);
+        // Perform the moves in a very janky way, I hate this it makes my eyes burn, but I have not found better solutions
+        // these commented ouputs are there in case I want to have the raw output ever again
+        for (int i = 1; i <= (1 << n) - 1; i++) {
+            if (i % 3 == 1) {
+                if (board.pillars[startPillar].Count == 0) {
+                    board.moveDisc(board.pillars[destPillar], board.pillars[startPillar]);
+                    // Console.WriteLine("3");
+                    // Console.WriteLine("1");
+                } else if (board.pillars[destPillar].Count == 0) {
+                    board.moveDisc(board.pillars[startPillar], board.pillars[destPillar]);
+                    // Console.WriteLine("1");
+                    // Console.WriteLine("3");
+                } else if (board.pillars[startPillar][board.pillars[startPillar].Count - 1].radius <= board.pillars[destPillar][board.pillars[destPillar].Count - 1].radius) {
+                    board.moveDisc(board.pillars[startPillar], board.pillars[destPillar]);
+                    // Console.WriteLine("1");
+                    // Console.WriteLine("3");
+                } else {
+                    board.moveDisc(board.pillars[destPillar], board.pillars[startPillar]);
+                    // Console.WriteLine("3");
+                    // Console.WriteLine("1");
+                }
+            } else if (i % 3 == 2) {
+                if (board.pillars[startPillar].Count == 0) {
+                    board.moveDisc(board.pillars[midPillar], board.pillars[startPillar]);
+                    // Console.WriteLine("2");
+                    // Console.WriteLine("1");
+                } else if (board.pillars[midPillar].Count == 0) {
+                    board.moveDisc(board.pillars[startPillar], board.pillars[midPillar]);
+                    // Console.WriteLine("1");
+                    // Console.WriteLine("2");
+                } else if (board.pillars[startPillar][board.pillars[startPillar].Count - 1].radius <= board.pillars[midPillar][board.pillars[midPillar].Count - 1].radius) {
+                    board.moveDisc(board.pillars[startPillar], board.pillars[midPillar]);
+                    // Console.WriteLine("1");
+                    // Console.WriteLine("2");
+                } else {
+                    board.moveDisc(board.pillars[midPillar], board.pillars[startPillar]);
+                    // Console.WriteLine("2");
+                    // Console.WriteLine("1");
+                }
+            } else if (i % 3 == 0) {
+                if (board.pillars[midPillar].Count == 0) {
+                    board.moveDisc(board.pillars[destPillar], board.pillars[midPillar]);
+                    // Console.WriteLine("3");
+                    // Console.WriteLine("2");
+                } else if (board.pillars[destPillar].Count == 0) {
+                    board.moveDisc(board.pillars[midPillar], board.pillars[destPillar]);
+                    // Console.WriteLine("2");
+                    // Console.WriteLine("3");
+                } else if (board.pillars[midPillar][board.pillars[midPillar].Count - 1].radius <= board.pillars[destPillar][board.pillars[destPillar].Count - 1].radius) {
+                    board.moveDisc(board.pillars[midPillar], board.pillars[destPillar]);
+                    // Console.WriteLine("2");
+                    // Console.WriteLine("3");
+                } else {
+                    board.moveDisc(board.pillars[destPillar], board.pillars[midPillar]);
+                    // Console.WriteLine("3");
+                    // Console.WriteLine("2");
+                }
+            }
+            // Thread.Sleep(100);
             board.draw();
         }
     }
