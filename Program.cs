@@ -169,7 +169,7 @@ class Program {
                     // Console.WriteLine("2");
                 }
             }
-            // Thread.Sleep(100);
+            Thread.Sleep(100);
             board.draw();
         }
     }

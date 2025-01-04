@@ -1,4 +1,4 @@
-Output demo-play.mp4
+Output demo-play.gif
 
 Set Shell fish
 Set FontFamily "Fira Code"
@@ -9,6 +9,12 @@ Set Height 1080
 # Set LineHeight 1.8
 Set TypingSpeed 100ms
 Set CursorBlink false
+
+Hide
+Type ".."
+Enter
+Show
+
 
 Type "dotnet run"
 Enter
