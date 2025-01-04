@@ -1,8 +1,9 @@
 # Tower of Hanoi
-This is a Towet of Hanoi Game I made in School. 
+This is a Towet of Hanoi Game I made for School. 
 
 # Features
+- Easy to Play
 - Tui
 - Color Mode
 - Unicode
-- Easy to Play
+- Autosolver (Iterativ)

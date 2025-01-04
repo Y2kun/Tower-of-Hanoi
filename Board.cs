@@ -21,73 +21,66 @@ namespace towerOfHanoi {
             if (destPillar.Count == 0 || destPillar[destPillar.Count - 1].radius >= discToMove.radius) {
                 startPillar.RemoveAt(startPillar.Count - 1);
                 destPillar.Add(discToMove);
+            } else {
+                Console.WriteLine("Invalid move!");
             }
         }
 
         public bool win() {
-            return pillars[0].Count() + pillars[1].Count() == 0;
+            return pillars[2].Count == discCount;
         }
 
         public void draw() {
-            if (enableAscii) drawAscii(); else drawUnicode();
-        }
-
-        public void drawAscii() {
-            string output = "\n";
-            for (int i = discCount - 1; i >= 0; i--) {
-                output += "| ";
-                foreach(List<Disc> pillar in pillars) {
-                    if (i < pillar.Count()) {
-                        output += stringRepeat(" ", discCount - pillar[i].radius);
-                        output += $"\x1B[38;5;{pillar[i].radius}m"; // Colors the Disc according to its radius
-                        output += stringRepeat("#", 2 * pillar[i].radius - 1);
-                        output += "\x1B[0m";
-                        output += stringRepeat(" ", discCount - pillar[i].radius);
-                    } else {
-                        output += stringRepeat(" ", 2 * discCount - 1);
-                    }
-                    // Space between pillars
-                    output += " | ";
-                }
+            string output = "";
+            if (enableAscii) {
                 output += "\n";
+            } else {
+                output += "┏━";
+                output += stringRepeat("━━", discCount);
+                output += "━┳━";
+                output += stringRepeat("━━", discCount);
+                output += "━┳━";
+                output += stringRepeat("━━", discCount);
+                output += "━┓\n";
             }
-            Console.WriteLine(output);
-        }
-
-        public void drawUnicode() {
-            string output = "┏━";
-            output += stringRepeat("━━", discCount);
-            output += "━┳━";
-            output += stringRepeat("━━", discCount);
-            output += "━┳━";
-            output += stringRepeat("━━", discCount);
-            output += "━┓\n";
 
             for (int i = discCount - 1; i >= 0; i--) {
-                output += "┃ ";
-                foreach (List<Disc> pillar in pillars) {
-                    if (i < pillar.Count()) {
-                        // The Pillar
+                output += enableAscii ? "| " : "┃ ";
+
+                foreach(List<Disc> pillar in pillars) {
+                    if (i < pillar.Count) {
                         output += stringRepeat(" ", discCount - pillar[i].radius);
-                        output += stringRepeat("⬜", pillar[i].radius);
+                        if (enableAscii) {
+                            output += $"\x1B[38;5;{pillar[i].radius}m"; // Colors the Disc according to its radius
+                            output += stringRepeat("#", 2 * pillar[i].radius - 1);
+                            output += "\x1B[0m";
+                        } else {
+                            output += stringRepeat("⬜", pillar[i].radius);
+                        }
                         output += stringRepeat(" ", discCount - pillar[i].radius);
                     } else {
-                        // When the Pillar has no content, fill output with spaces
-                        output += stringRepeat("  ", discCount);
+                        if (enableAscii) {
+                            output += stringRepeat(" ", 2 * discCount - 1);
+                        } else {
+                            output += stringRepeat("  ", discCount);
+                        }
                     }
                     // Space between pillars
-                    output += " ┃ ";
+                    output += enableAscii ? " | " : " ┃ ";
                 }
                 // the next row
                 output += "\n";
             }
-            output += "┗━";
-            output += stringRepeat("━━", discCount);
-            output += "━┻━";
-            output += stringRepeat("━━", discCount);
-            output += "━┻━";
-            output += stringRepeat("━━", discCount);
-            output += "━┛";
+            if (!enableAscii) {
+                output += "┗━";
+                output += stringRepeat("━━", discCount);
+                output += "━┻━";
+                output += stringRepeat("━━", discCount);
+                output += "━┻━";
+                output += stringRepeat("━━", discCount);
+                output += "━┛";
+            }
+
             Console.WriteLine(output);
         }
 
