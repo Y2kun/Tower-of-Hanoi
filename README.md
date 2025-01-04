@@ -1,15 +1,15 @@
 # Tower of Hanoi
-This is a Towet of Hanoi Game I made for School. 
+This is a Tower of Hanoi Game I made for school. 
 
 ## Features
 - Easy to Play
-- Tui
+- TUI
 - Color Mode
 - Unicode
-- Autosolver (Iterativ)
+- Autosolver (Iterative)
 
-## Demonstration of regular playing
-!(Brief Demo of Playing)[demos/demo-play.gif]
+## Demonstration of Regular Playing
+![Brief Demo of Playing](demos/demo-play.gif)
 
 ## Demonstration of the Solver
-!(Breif Demo of the Solver)[demos/demo-solver.gif]
+![Brief Demo of the Solver](demos/demo-solver.gif)
